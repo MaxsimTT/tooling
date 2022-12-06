@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomePageController;
+use App\Http\Controllers\DownloadFileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,3 +20,4 @@ use App\Http\Controllers\HomePageController;
 // });
 
 Route::get('/', [HomePageController::class, 'getHomePage'])->name('homePage');
+Route::match(['post'], '/download', [DownloadFileController::class, 'downloadFile'])->name('downloadFile');
