@@ -12,7 +12,7 @@
 		@csrf
 		<p>Загрузите ваши фотографии на сервер</p>
 		<p><input type="file" name="photo" multiple accept="image/*,image/jpeg">
-		<input type="submit" value="Отправить"></p>
+		<input type="submit" value="Отправить" name="upload"></p>
 	</form>
 </body>
 </html>
