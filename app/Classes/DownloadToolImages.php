@@ -39,4 +39,20 @@ class DownloadToolImages
 		$target = $path . '\\' . $file['name'];
 		return move_uploaded_file($file['tmp_name'], $target);
 	}
+
+	public function convertToWebp($file, $path, $path_to) {
+		$img_full_name = $path . '\\' . $file['name'];
+		$webp_full_name = $path_to . '\\' . $file['name'] . '.webp';
+
+		if (!is_file($img_full_name)) {
+			return 'Изображение не найдено!';
+		}
+
+		$img_data = getimagesize($img_full_name);
+		$img = imagecreatefromjpeg($img_full_name);
+
+		$res_converter_webp = imagejpeg($img, $webp_full_name, 50);
+
+		return $res_converter_webp;
+	}
 }

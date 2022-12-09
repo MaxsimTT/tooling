@@ -44,11 +44,8 @@ class DownloadFileController extends Controller
         }
 
         $img_upload_path = storage_path('app\public\img\tool');
-        if (!is_dir($img_upload_path)) {
-            if (!mkdir($img_upload_path, 0777, true)) {
-                return 'Не удалось создать директории...';
-            }
-        }
+
+        $this->createDirUloadImg($img_upload_path);
 
         $file = $download_processor->prepareImg($file, $img_upload_path);
 
@@ -61,6 +58,10 @@ class DownloadFileController extends Controller
         if ($res == false) {
             return;
         }
+
+        $img_to_webp_dir = storage_path('app\public\img\tool\webp');
+        $this->createDirUloadImg($img_to_webp_dir);
+        $download_processor->convertToWebp($file, $img_upload_path, $img_to_webp_dir);
 
         $image = new Image;
         $image_link = new ImageLink;
@@ -77,5 +78,14 @@ class DownloadFileController extends Controller
         }
 
         return redirect()->route('homePage');
+    }
+
+    public function createDirUloadImg($path_dir) {
+        if (!is_dir($path_dir)) {
+            if (!mkdir($path_dir, 0777, true)) {
+                return 'Не удалось создать директории...';
+            }
+        }
+        return true;
     }
 }
