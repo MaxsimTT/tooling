@@ -29,6 +29,7 @@ class HomePageController extends Controller
                     'images_links.object_id',
                     'images_links.object_type',
                     'images_links.type')
+                ->orderByDesc('id')
                 ->get();
 
         $img_get_path = '\storage\app\public\img\tool\\';
