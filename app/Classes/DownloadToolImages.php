@@ -40,7 +40,8 @@ class DownloadToolImages
 		return move_uploaded_file($file['tmp_name'], $target);
 	}
 
-	public function convertToWebp($file, $path, $path_to) {
+	public function convertToWebp(array $file, string $path, string $path_to, int $quality): string
+	{
 		$img_full_name = $path . '\\' . $file['name'];
 		$webp_full_name = $path_to . '\\' . $file['name'] . '.webp';
 
@@ -49,9 +50,24 @@ class DownloadToolImages
 		}
 
 		$img_data = getimagesize($img_full_name);
-		$img = imagecreatefromjpeg($img_full_name);
+		$is_alpha = false;
 
-		$res_converter_webp = imagejpeg($img, $webp_full_name, 50);
+		if ($img_data['mime'] == 'image/png') {
+			$is_alpha = true;
+			$img = imagecreatefrompng($img_full_name);
+		} elseif ($img_data['mime'] == 'image/jpeg') {
+			$img = imagecreatefromjpeg($img_full_name);
+		} else {
+			return $img_full_name;
+		}
+
+		if ($is_alpha) {
+			imagepalettetotruecolor($img);
+			imagealphablending($img, true);
+			imagesavealpha($img, true);
+		}
+
+		$res_converter_webp = imagewebp($img, $webp_full_name, $quality);
 
 		return $res_converter_webp;
 	}
