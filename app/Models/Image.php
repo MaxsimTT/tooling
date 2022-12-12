@@ -12,4 +12,8 @@ class Image extends Model
     protected $table = 'images';
     protected $primeryKey = 'image_id';
 
+    public function image_link() {
+    	return $this->hasOne('App\Models\ImageLink', 'detailed_id', 'image_id');
+    }
+
 }
