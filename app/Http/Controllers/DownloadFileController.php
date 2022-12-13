@@ -63,15 +63,10 @@ class DownloadFileController extends Controller
         $this->createDirUploadImg($img_to_webp_dir);
         $download_processor->convertToWebp($file, $img_upload_path, $img_to_webp_dir, 50);
 
-        $image = new Image;
-        $image_link = new ImageLink;
+        $image = Image::create(['image_path' => $file['name']]);
 
-        $image->image_path = $file['name'];
-        $image->save();
-
-        $image_link->detailed_id = $image->id;
-        $image_link->object_type = 'tool';
-        $image_link->save();
+        $image = Image::where('image_id', $image->id)->first();
+        $image_link = $image->image_link()->create(['object_type' => 'tool']);
 
         if (!$image_link->id) {
             return 'Ошибка записи ссылки на изображение в БД';
