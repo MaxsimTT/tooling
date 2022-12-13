@@ -33,6 +33,12 @@ class HomePageController extends Controller
                 ->orderByDesc('id')
                 ->get();
 
+        // dump(Image::where('image_id', 1)->first()->image_id);
+        // $image_test = Image::where('image_id', 1)->first();
+        // dump($image_test->image_id);
+        // $image_test->image_id = 888;
+        // dump($image_test->image_id);
+        
         $img_get_path = '\storage\app\public\img\tool\\';
         $img_get_path_webp = '\storage\app\public\img\tool\webp\\';
         $images_path = [];

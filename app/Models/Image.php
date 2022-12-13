@@ -17,4 +17,12 @@ class Image extends Model
     	return $this->hasOne('App\Models\ImageLink', 'detailed_id', 'image_id');
     }
 
+    // public function getImageIdAttribute($value) {
+    //     return 'hello ' . $value;
+    // }
+
+    // public function setImageIdAttribute($value) {
+    //     $this->attributes['image_id'] = ' | ' . $value . ' | ';
+    // }
+
 }
