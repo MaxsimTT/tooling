@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Classes\DownloadToolImages;
 use App\Models\Image;
 use App\Models\ImageLink;
+use App\Models\Tool;
 
 class DownloadFileController extends Controller
 {
@@ -21,15 +22,7 @@ class DownloadFileController extends Controller
         //
     }
 
-    public function downloadFile(Request $request) {
-
-        if (empty($request->input('upload'))) {
-            return;
-        }
-
-        if (empty($_FILES['photo']['tmp_name'])) {
-           return;
-        }
+    public function downloadFile(Request $request, $tool_id = 0, $tool_type = 'tool') {
 
         $file = $_FILES['photo'];
 
@@ -66,13 +59,13 @@ class DownloadFileController extends Controller
         $image = Image::create(['image_path' => $file['name']]);
 
         $image = Image::where('image_id', $image->id)->first();
-        $image_link = $image->image_link()->create(['object_type' => 'tool']);
+        $image_link = $image->image_link()->create(['object_type' => $tool_type, 'object_id' => $tool_id]);
 
         if (!$image_link->id) {
             return 'Ошибка записи ссылки на изображение в БД';
         }
 
-        return redirect()->route('homePage');
+        return true;
     }
 
     public function createDirUploadImg($path_dir) {
@@ -85,16 +78,35 @@ class DownloadFileController extends Controller
     }
 
     public function deleteImage(Request $request) {
-        
+
         $image_id = $request->image_id;
         if (empty($image_id)) {
             return redirect()->route('homePage');
         }
 
         $image = Image::where('image_id', $image_id)->first();
+        $tool_id = $image->image_link->object_id;
+        $tool = Tool::find($tool_id)->delete();
         $image->image_link()->delete();
         $image->where('image_id', $image_id)->delete();
 
+        return redirect()->route('homePage');
+    }
+
+    public function setTool(Request $request) {
+
+        $tool_data = $request->input();
+
+        $tool = Tool::create([
+            'tool_code' => $tool_data['tool_code'],
+            'tool_type' => $tool_data['tool_type'],
+            'amount'    => $tool_data['tool_amount'],
+        ]);
+
+        if (!empty($_FILES['photo']['tmp_name'])) {
+          $this->downloadFile($request, $tool->id, $tool->tool_type);
+        }
+        
         return redirect()->route('homePage');
     }
 }
