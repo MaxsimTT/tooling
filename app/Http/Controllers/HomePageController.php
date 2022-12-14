@@ -48,13 +48,14 @@ class HomePageController extends Controller
                 $images_path[$key] = [
                     'img_path' => $img_get_path . $tool_img->img_name,
                     'img_name' => $tool_img->img_name,
+                    'img_id'   => $tool_img->id,
                 ];
                 if (is_file(storage_path('app\public\img\tool\webp\\' . $tool_img->img_name . '.webp'))) {
                     $images_path[$key]['img_path'] = $img_get_path_webp . $tool_img->img_name . '.webp';
                 }
             }
         }
-
+        // dump($images_path);
         return view('homepage', ['images' => $images_path]);
     }
 }

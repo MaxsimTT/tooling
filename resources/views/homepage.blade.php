@@ -15,6 +15,9 @@
 		@foreach ($images as $img)
 			<div>
 	    		<img style="max-width: 20%" src="{{ $img['img_path'] }}" alt="{{ $img['img_name'] }}">
+	    		<a href="{{ url('/image_delete', ['image_id' => $img['img_id']]) }}">
+					<button class="btn btn-default">Delete</button>
+				</a>
 	    	</div>
 	    @endforeach
 	@endif

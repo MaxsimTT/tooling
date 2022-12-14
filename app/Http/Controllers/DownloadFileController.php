@@ -83,4 +83,18 @@ class DownloadFileController extends Controller
         }
         return true;
     }
+
+    public function deleteImage(Request $request) {
+        
+        $image_id = $request->image_id;
+        if (empty($image_id)) {
+            return redirect()->route('homePage');
+        }
+
+        $image = Image::where('image_id', $image_id)->first();
+        $image->image_link()->delete();
+        $image->where('image_id', $image_id)->delete();
+
+        return redirect()->route('homePage');
+    }
 }
