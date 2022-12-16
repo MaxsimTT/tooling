@@ -77,9 +77,9 @@ class DownloadFileController extends Controller
         return true;
     }
 
-    public function deleteImage(Request $request) {
+    public function deleteImage($image_id) {
 
-        $image_id = $request->image_id;
+        $image_id = $image_id;
         if (empty($image_id)) {
             return redirect()->route('homePage');
         }
