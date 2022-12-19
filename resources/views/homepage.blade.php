@@ -5,16 +5,25 @@
 	<title>Home</title>
 </head>
 <body>
+@if (count($errors) > 0)
+	<div class="alert alert-danger">
+		<ul>
+		@foreach($errors->all() as $error)
+			<li>{{ $error }}</li>
+		@endforeach
+		</ul>
+	</div>
+@endif
 	<form enctype="multipart/form-data" method="POST" action="{{ route('downloadFile') }}">
 		@csrf
 		<p>Загрузите ваши фотографии на сервер</p>
 		<div>
 			<label for="tool_code">Номер остнастки:</label>
-			<input type="text" name="tool_code" id="tool_code"><br>
+			<input type="text" name="tool_code" id="tool_code" value="{{ old('tool_code') }}"><br>
 			<label for="tool_type">Тип остнастки:</label>
-			<input type="text" name="tool_type" id="tool_type"><br>
+			<input type="text" name="tool_type" id="tool_type" value="{{ old('tool_type') }}"><br>
 			<label for="tool_amount">Количество остнастки:</label>
-			<input type="text" name="tool_amount" id="tool_amount"><br>
+			<input type="text" name="tool_amount" id="tool_amount" value="{{ old('tool_amount') }}"><br>
 			<input type="file" name="photo" multiple accept="image/*,image/jpeg">
 		</div>
 		<div>

@@ -158,6 +158,10 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        'tool_code' => [
+            'required' => 'Поле :attribute бязательно к заполнению',
+            'max'      => 'Для поля :attribute допустимо не более :max символов',
+        ],
     ],
 
     /*

@@ -8,6 +8,7 @@ use App\Classes\DownloadToolImages;
 use App\Models\Image;
 use App\Models\ImageLink;
 use App\Models\Tool;
+use Validator;
 
 class DownloadFileController extends Controller
 {
@@ -95,18 +96,45 @@ class DownloadFileController extends Controller
 
     public function setTool(Request $request) {
 
-        $tool_data = $request->input();
+        if ($request->isMethod('post')) {
 
-        $tool = Tool::create([
-            'tool_code' => $tool_data['tool_code'],
-            'tool_type' => $tool_data['tool_type'],
-            'amount'    => $tool_data['tool_amount'],
-        ]);
+            // $rules = [
+            //     'tool_code'   => 'required|max:10',
+            //     'tool_type'   => 'required|max:10',
+            //     'tool_amount' => 'required|max:10',
+            //     'photo'       => 'required',
+            // ];
 
-        if (!empty($_FILES['photo']['tmp_name'])) {
-          $this->downloadFile($request, $tool->id, $tool->tool_type);
+            // $this->validate($request, $rules/*, $messages*/);
+
+            $messages = [];
+
+            $validator = Validator::make($request->all(), [
+                        'tool_code'   => 'required|max:6',
+                        'tool_type'   => 'required|max:6',
+                        'tool_amount' => 'required|max:6',
+                        'photo'       => 'required',
+                    ], $messages);
+
+            if ($validator->fails()) {
+                return redirect()->route('homePage')->withErrors($validator)->withInput();
+            }
+
+            dd($request->all(), 2);
+            $tool_data = $request->input();
+
+            $tool = Tool::create([
+                'tool_code' => $tool_data['tool_code'],
+                'tool_type' => $tool_data['tool_type'],
+                'amount'    => $tool_data['tool_amount'],
+            ]);
+
+            if (!empty($_FILES['photo']['tmp_name'])) {
+              $this->downloadFile($request, $tool->id, $tool->tool_type);
+            }
+
+            return redirect()->route('homePage');
+            
         }
-        
-        return redirect()->route('homePage');
     }
 }
