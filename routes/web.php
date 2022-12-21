@@ -22,3 +22,11 @@ use App\Http\Controllers\DownloadFileController;
 Route::get('/', [HomePageController::class, 'getHomePage'])->name('homePage');
 Route::post('/download', [DownloadFileController::class, 'setTool'])->name('downloadFile');
 Route::get('/image_delete/{image_id}', [DownloadFileController::class, 'deleteImage'])->name('deleteFile');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
