@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\DownloadFileController;
+use App\Http\Controllers\Admin\AdminHomeController;
+use App\Http\Controllers\Admin\AdminPostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +30,7 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::group(['prefix' => 'admin', 'middleware' => ['web', 'auth']], function() {
+	Route::get('/', [AdminHomeController::class, 'show'])->name('admin_home');
+	Route::get('/add/post', [AdminPostController::class, 'create'])->name('admin_add_post');
+});
