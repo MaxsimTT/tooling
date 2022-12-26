@@ -22,7 +22,7 @@ use App\Http\Controllers\Admin\AdminPostController;
 // });
 
 // Route::get('/', [HomePageController::class, 'getHomePage'])->name('homePage');
-Route::get('/', [HomePageController::class, 'getHomePage'])->name('homePage')->middleware('auth');
+Route::get('/', [HomePageController::class, 'getHomePage'])->name('homePage')/*->middleware('auth')*/;
 Route::post('/download', [DownloadFileController::class, 'setTool'])->name('downloadFile');
 Route::get('/image_delete/{image_id}', [DownloadFileController::class, 'deleteImage'])->name('deleteFile');
 
