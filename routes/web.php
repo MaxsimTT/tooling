@@ -5,6 +5,7 @@ use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\DownloadFileController;
 use App\Http\Controllers\Admin\AdminHomeController;
 use App\Http\Controllers\Admin\AdminPostController;
+use App\Http\Controllers\Auth\MyAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,3 +35,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['web', 'auth']], function() 
 	Route::get('/', [AdminHomeController::class, 'show'])->name('admin_home');
 	Route::get('/add/post', [AdminPostController::class, 'create'])->name('admin_add_post');
 });
+
+Route::get('/login', [MyAuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [MyAuthController::class, 'authenticateLogin']);
