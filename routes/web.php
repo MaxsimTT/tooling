@@ -6,6 +6,7 @@ use App\Http\Controllers\DownloadFileController;
 use App\Http\Controllers\Admin\AdminHomeController;
 use App\Http\Controllers\Admin\AdminPostController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\Auth\MyAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,3 +42,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['web', 'auth']], function() 
 	Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('show_post');
 	Route::match(['patch', 'put'], '/posts/{post}', [PostController::class, 'update']);
 });
+
+Route::get('/login', [MyAuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [MyAuthController::class, 'authenticateLogin']);
