@@ -37,7 +37,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['web', 'auth']], function() 
 	Route::get('/add/post', [AdminPostController::class, 'create'])->name('admin_add_post');
 
 	Route::get('/posts/create', [PostController::class, 'create'])->name('create_post');
-	Route::post('/posts', [PostController::class, 'store']);
+	Route::post('/posts', [PostController::class, 'store'])->name('admin_add_post_p');
 
 	Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('show_post');
 	Route::match(['patch', 'put'], '/posts/{post}', [PostController::class, 'update']);

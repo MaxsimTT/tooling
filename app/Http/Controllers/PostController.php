@@ -19,6 +19,6 @@ class PostController extends Controller
 
     public function create(Request $request)
     {
-        dump($request->path());
+        return view('add_post', ['title' => 'Создать запись']);
     }
 }
