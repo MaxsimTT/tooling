@@ -5,6 +5,7 @@ use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\DownloadFileController;
 use App\Http\Controllers\Admin\AdminHomeController;
 use App\Http\Controllers\Admin\AdminPostController;
+use App\Http\Controllers\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,4 +34,10 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::group(['prefix' => 'admin', 'middleware' => ['web', 'auth']], function() {
 	Route::get('/', [AdminHomeController::class, 'show'])->name('admin_home');
 	Route::get('/add/post', [AdminPostController::class, 'create'])->name('admin_add_post');
+
+	Route::get('/posts/create', [PostController::class, 'create'])->name('create_post');
+	Route::post('/posts', [PostController::class, 'store']);
+
+	Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('show_post');
+	Route::match(['patch', 'put'], '/posts/{post}', [PostController::class, 'update']);
 });
