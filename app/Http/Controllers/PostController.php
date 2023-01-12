@@ -29,7 +29,6 @@ class PostController extends Controller
 
         $role = Role::where('name', 'admin')->first();
 
-        // dump($role->users);
         foreach ($role->users as $user) {
             echo $user->name . '<br/>';
         }
@@ -37,13 +36,38 @@ class PostController extends Controller
         foreach ($user->roles as $role) {
             echo $role->name . '<br/>';
         }
-        // dump($user->posts);
-        // $post = Post::where('id', 2)->first();
 
         return view('add_post', ['title' => 'Создать запись', 'user_id' => $user_id]);
     }
 
     public function store(Request $request) {
-        dump($request->input());
+
+        if ($request->isMethod('POST')) {
+
+            $rules = [
+                'name'    => 'required|max:10',
+                'user_id' => 'required',
+                'text'    => 'required',
+            ];
+
+            $this->validate($request, $rules/*, $messages*/);
+
+            $data = $request->input();
+
+            $post = new Post;
+
+            $post->name = $data['name'];
+            $post->user_id = $data['user_id'];
+            $post->description   = $data['text'];
+
+            $post->save();
+
+            return redirect()->route('post_show', ['post' => $post->id]);
+        }
+    }
+
+    public function show(Request $request) {
+
+        return view('view_post', ['title' => 'Пост']);
     }
 }
