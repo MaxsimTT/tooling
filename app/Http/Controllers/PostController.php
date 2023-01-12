@@ -66,8 +66,20 @@ class PostController extends Controller
         }
     }
 
-    public function show(Request $request) {
+    public function show(Request $request, $id) {
 
-        return view('view_post', ['title' => 'Пост']);
+        dump($id);
+
+        $user_id = Auth::id();
+
+        $post = Post::find($id);
+
+        dump($post);
+
+        return view('view_post', ['title' => 'Пост', 'user_id' => $user_id, 'post_id' => $id]);
+    }
+
+    public function update(Request $request, $id) {
+        dd($request->input, $id);
     }
 }

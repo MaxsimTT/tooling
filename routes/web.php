@@ -42,7 +42,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['web', 'auth']], function() 
 	Route::get('/posts/{post}', [PostController::class, 'show'])->name('post_show');
 
 	Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('show_post');
-	Route::match(['patch', 'put'], '/posts/{post}', [PostController::class, 'update']);
+	Route::match(['patch', 'put'], '/posts/{post}', [PostController::class, 'update'])->name('admin_update_post_p');
 });
 
 Route::get('/login', [MyAuthController::class, 'showLogin'])->name('login');
