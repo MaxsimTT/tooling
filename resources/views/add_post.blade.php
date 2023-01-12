@@ -31,7 +31,7 @@
 	    <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" placeholder="Заголовок">
 	  </div>
 	  <div class="form-group">
-	    <input type="hidden" class="form-control" id="user_id" value="{{ old('user_id') }}" name="user_id" placeholder="author">
+	    <input type="hidden" class="form-control" id="user_id" value="{{ $user_id }}" name="user_id" placeholder="author">
 	  </div>
 	  <div class="form-group">
 	    <label for="text">Текст</label>
