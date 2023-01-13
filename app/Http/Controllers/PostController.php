@@ -69,7 +69,12 @@ class PostController extends Controller
     public function show(Request $request, $id) {
 
         $user_id = Auth::id();
-        $post = Post::find($id);r
+        $post = Post::find($id);
+
+        // dump($post->user->roles);
+        foreach ($post->user->roles as $role) {
+            echo $role->name;
+        }
 
         return view('view_post', ['title' => 'Пост', 'user_id' => $user_id, 'post_id' => $id, 'post' => $post]);
     }
@@ -80,6 +85,7 @@ class PostController extends Controller
             
             $data = $request->input();
             $post = Post::find($post_id);
+
             $post->name = $data['name'];
             $post->description = $data['text'];
 
