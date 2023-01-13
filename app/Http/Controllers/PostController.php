@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+// use Illuminate\Auth\Access\Gate as G;
 use App\Models\User;
 use App\Models\Post;
 use App\Models\Role;
+use Gate;
 use Auth;
 
 class PostController extends Controller
@@ -23,18 +25,16 @@ class PostController extends Controller
 
     public function create(Request $request)
     {
+        // echo '<pre>';
+        // print_r(get_class_methods(G::class));
+        // echo '</pre>';
+
         $user_id = Auth::id();
         $user = User::find($user_id);
         dump($user_id);
 
-        $role = Role::where('name', 'admin')->first();
-
-        foreach ($role->users as $user) {
-            echo $user->name . '<br/>';
-        }
-
         foreach ($user->roles as $role) {
-            echo $role->name . '<br/>';
+            echo $role->name . "<br/>";
         }
 
         return view('add_post', ['title' => 'Создать запись', 'user_id' => $user_id]);
@@ -43,6 +43,10 @@ class PostController extends Controller
     public function store(Request $request) {
 
         if ($request->isMethod('POST')) {
+
+            if (Gate::denies('add-post')) {
+                return redirect()->back()->with(['message' => 'You don\'t have permissions']);
+            }
 
             $rules = [
                 'name'    => 'required|max:10',
