@@ -45,7 +45,7 @@ class PostController extends Controller
         if ($request->isMethod('POST')) {
 
             if (Gate::denies('add-post')) {
-                return redirect()->back()->with(['message' => 'You don\'t have permissions']);
+                return redirect()->back()->withErrors(['message' => 'You don\'t have permissions']);
             }
 
             $rules = [
@@ -66,7 +66,7 @@ class PostController extends Controller
 
             $post->save();
 
-            return redirect()->route('post_show', ['post' => $post->id]);
+            return redirect()->route('post_show', ['post' => $post->id])->with(['message' => 'Added post']);
         }
     }
 
@@ -89,13 +89,19 @@ class PostController extends Controller
             
             $data = $request->input();
             $post = Post::find($post_id);
+            // $user = User::find(2);
 
-            $post->name = $data['name'];
-            $post->description = $data['text'];
+            if (Gate::/*forUser($user)->*/allows('update-post', $post)) {
 
-            $post->save();
+                $post->name = $data['name'];
+                $post->description = $data['text'];
 
-            return redirect()->back();
+                $post->save();
+
+                return redirect()->back()->with(['message' => 'Post updated']);
+            }
+
+            return redirect()->back()->withErrors(['message' => 'Post didn\'t updated']);
         }
     }
 }
