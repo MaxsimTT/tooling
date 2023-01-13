@@ -68,18 +68,24 @@ class PostController extends Controller
 
     public function show(Request $request, $id) {
 
-        dump($id);
-
         $user_id = Auth::id();
+        $post = Post::find($id);r
 
-        $post = Post::find($id);
-
-        dump($post);
-
-        return view('view_post', ['title' => 'Пост', 'user_id' => $user_id, 'post_id' => $id]);
+        return view('view_post', ['title' => 'Пост', 'user_id' => $user_id, 'post_id' => $id, 'post' => $post]);
     }
 
-    public function update(Request $request, $id) {
-        dd($request->input, $id);
+    public function update(Request $request, $post_id) {
+        
+        if ($request->isMethod('POST')) {
+            
+            $data = $request->input();
+            $post = Post::find($post_id);
+            $post->name = $data['name'];
+            $post->description = $data['text'];
+
+            $post->save();
+
+            return redirect()->back();
+        }
     }
 }
