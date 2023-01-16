@@ -44,29 +44,60 @@ class PostController extends Controller
 
         if ($request->isMethod('POST')) {
 
-            if (Gate::denies('add-post')) {
+            $user = Auth::user();
+            $post = new Post;
+
+            try {
+                $this->authorizeForUser($user, 'add', $post);
+                $rules = [
+                    'name'    => 'required|max:10',
+                    'user_id' => 'required',
+                    'text'    => 'required',
+                ];
+                $this->validate($request, $rules/*, $messages*/);
+
+                $data = $request->input();
+
+                $post = new Post;
+
+                $post->name = $data['name'];
+                $post->user_id = $data['user_id'];
+                $post->description   = $data['text'];
+
+                $post->save();
+
+                return redirect()->route('post_show', ['post' => $post->id])->with(['message' => 'Added post']);
+            } catch (\HttpException $e) {
                 return redirect()->back()->withErrors(['message' => 'You don\'t have permissions']);
             }
 
-            $rules = [
-                'name'    => 'required|max:10',
-                'user_id' => 'required',
-                'text'    => 'required',
-            ];
+            // if (Gate::denies('add', $post)) {
+            //     return redirect()->back()->withErrors(['message' => 'You don\'t have permissions']);
+            // }
 
-            $this->validate($request, $rules/*, $messages*/);
+            // if ($request->user()->cannot('add', $post)) {
+            //     return redirect()->back()->withErrors(['message' => 'You don\'t have permissions']);
+            // }
 
-            $data = $request->input();
+            // $rules = [
+            //     'name'    => 'required|max:10',
+            //     'user_id' => 'required',
+            //     'text'    => 'required',
+            // ];
 
-            $post = new Post;
+            // $this->validate($request, $rules/*, $messages*/);
 
-            $post->name = $data['name'];
-            $post->user_id = $data['user_id'];
-            $post->description   = $data['text'];
+            // $data = $request->input();
 
-            $post->save();
+            // $post = new Post;
 
-            return redirect()->route('post_show', ['post' => $post->id])->with(['message' => 'Added post']);
+            // $post->name = $data['name'];
+            // $post->user_id = $data['user_id'];
+            // $post->description   = $data['text'];
+
+            // $post->save();
+
+            // return redirect()->route('post_show', ['post' => $post->id])->with(['message' => 'Added post']);
         }
     }
 
@@ -80,7 +111,7 @@ class PostController extends Controller
             echo $role->name;
         }
 
-        return view('view_post', ['title' => 'Пост', 'user_id' => $user_id, 'post_id' => $id, 'post' => $post]);
+        return view('view_post', ['title' => 'Пост', 'user_id' => $user_id, 'post_id' => $id, 'post' => $post, 'message' => 'Full permissions']);
     }
 
     public function update(Request $request, $post_id) {
@@ -91,7 +122,8 @@ class PostController extends Controller
             $post = Post::find($post_id);
             // $user = User::find(2);
 
-            if (Gate::/*forUser($user)->*/allows('update-post', $post)) {
+            // if (Gate::/*forUser($user)->*/allows('update', $post)) {
+            if ($request->user()->can('update', $post)) {
 
                 $post->name = $data['name'];
                 $post->description = $data['text'];

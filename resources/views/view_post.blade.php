@@ -23,6 +23,12 @@
 	        {{ session('message') }}
 	    </div>
 	@endif
+
+	@cannot('update', $post)
+	    <div class="alert alert-danger">
+	        {{ $message }}
+	    </div>
+	@endcannot
 	
 	<form method="post" action="{{ route('admin_update_post_p', ['post' => $post_id]) }}">
 	<input type="hidden" name="_token" value="{{ csrf_token() }}">
