@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\AdminHomeController;
 use App\Http\Controllers\Admin\AdminPostController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\Auth\MyAuthController;
+use App\Http\Controllers\TestApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +45,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['web', 'auth']], function() 
 	Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('show_post');
 	Route::post('/posts/{post}', [PostController::class, 'update'])->name('admin_update_post_p');
 });
+
+Route::get('/testapi', [TestApiController::class, 'show'])->name('showapi');
+Route::post('/testapi', [TestApiController::class, 'testApi']);
 
 Route::get('/login', [MyAuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [MyAuthController::class, 'authenticateLogin']);

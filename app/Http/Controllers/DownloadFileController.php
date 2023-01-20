@@ -120,7 +120,6 @@ class DownloadFileController extends Controller
                 return redirect()->route('homePage')->withErrors($validator)->withInput();
             }
 
-            dd($request->all(), 2);
             $tool_data = $request->input();
 
             $tool = Tool::create([
